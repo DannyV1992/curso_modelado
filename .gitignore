@@ -34,3 +34,7 @@ env/
 # Secretos
 .env
 *.key
+
+# Otros
+CLAUDE.md
+.claude

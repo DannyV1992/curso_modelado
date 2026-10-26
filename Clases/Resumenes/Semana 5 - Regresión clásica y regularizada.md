@@ -1,13 +1,19 @@
 # Semana 5: Regresión clásica y regularizada
 
 **Curso:** BCD5105 Modelado matemático, Lead University (III cuatrimestre 2026, virtual)
+
 **Docente:** Jordy Alfaro Brenes
+
 **Fecha:** jueves 8 de octubre de 2026
+
 **PDF fuente:** `Clases/PDFs/Semana 5 - Regresion clasica y regularizada 2.pdf`
+
 **Cobertura del PDF:** Completo (diapositivas 1 a 52). Según la transcripción no se trabajaron los ejemplos de las diapositivas 13, 21 y 26 ni el ejemplo 1 de la 7 (las soluciones que aparecen aquí se calcularon a partir del enunciado), y todos los bloques de ejercicios quedan como tarea moral. La actividad en salas (diapositiva 49) no se realizó; quedó como actividad complementaria en el aula virtual. Las diapositivas 8, 14, 22 y 27 son espacios de trabajo en blanco.
+
 **Tramos solo del PDF:** la transcripción no toca la comparación de modelos con LOO (diapositiva 47) ni el código del modelo de PyMC línea por línea. La demostración en vivo de PyMC y Bambi tuvo problemas (Bambi no viene instalado en Colab, reinicio de sesión, error de nombre de variable); sus resultados salen de las diapositivas 45 y 46.
 
 **Contexto:** la semana 4 terminó en "prior × verosimilitud"; esta semana se parte de la recta de mínimos cuadrados y se llega a ver la regularización como un prior. La regresión parece un modelo simple, pero es de los más usados en la práctica (banca, política social, energía) por dos razones: **interpretabilidad** (los coeficientes se leen directamente) y **explicabilidad regulatoria** (hoy no basta con decir "el modelo no aprobó el crédito"; hay que poder justificarlo). Mucha gente la usa sin saber qué ocurre por dentro: por eso se construye primero a mano. La sesión tiene dos mitades: a mano y en Python.
+
 **Objetivos:** calcular a mano la recta de mínimos cuadrados y predecir con ella; juzgarla con $R^2$ y residuos; explicar qué hacen Ridge, Lasso y Elastic Net y cuándo usar cada uno; elegir la fuerza de la regularización con validación cruzada sin fuga de datos; leer una regresión bayesiana.
 
 | Bloque | Tema | Diapositivas |

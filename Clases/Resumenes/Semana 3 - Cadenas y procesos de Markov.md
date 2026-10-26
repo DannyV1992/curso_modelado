@@ -1,13 +1,19 @@
 # Semana 3: Cadenas y procesos de Markov
 
 **Curso:** BCD5105 Modelado matemático, Lead University (III cuatrimestre 2026, virtual)
+
 **Docente:** Jordy Alfaro Brenes
+
 **Fecha:** jueves 24 de setiembre de 2026
+
 **PDF fuente:** `Clases/PDFs/Semana 3 - Cadenas y procesos de Markov 2.pdf`
+
 **Cobertura del PDF:** Completo (diapositivas 1 a 44). El ejemplo 2 de la propiedad de Markov quedó como tarea moral y la actividad en salas no se realizó en clase (solo se mostró el documento).
+
 **Tramos solo del PDF:** la transcripción tiene cortes en PageRank, el SIR en redes y parte del código en R; esas secciones salen del PDF.
 
 **Contexto:** la semana 2 fue determinística (EDO); esta semana los modelos son estocásticos. En la parte manual importan los conceptos, no la mecánica del cálculo. El código es en R dentro de Google Colab (solo se usa R en las semanas 3 y 6).
+
 **Objetivos:** reconocer cuándo se cumple la propiedad de Markov; construir diagrama y matriz de transición; proyectar la distribución a varios pasos; calcular la distribución estacionaria y saber cuándo existe; entender qué agrega un modelo oculto; replicarlo en R.
 
 ---

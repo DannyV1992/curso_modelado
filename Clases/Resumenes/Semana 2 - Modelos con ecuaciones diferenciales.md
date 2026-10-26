@@ -1,13 +1,19 @@
 # Semana 2: Modelos con ecuaciones diferenciales
 
 **Curso:** BCD5105 Modelado matemático, Lead University (III cuatrimestre 2026, virtual)
+
 **Docente:** Jordy Alfaro Brenes
+
 **Fecha:** jueves 17 de setiembre de 2026
+
 **PDF fuente:** `Clases/PDFs/Semana 2 - Modelos con ecuaciones diferenciales 2.pdf`
+
 **Cobertura del PDF:** Completo (diapositivas 1 a 53).
+
 **Fuente:** solo el PDF; no hay transcripción de esta clase (la sesión se dictó grabada).
 
 **Contexto:** primer tipo de modelo del curso, determinístico. Primero a mano (leer e interpretar EDO) y luego en Python con `scipy.integrate`.
+
 **Objetivos:** leer una EDO como regla de cambio; contrastar Malthus y Verhulst; hallar equilibrios y juzgar su estabilidad; interpretar el SIR y $R_0$; resolver y calibrar estos modelos con SciPy.
 
 ---

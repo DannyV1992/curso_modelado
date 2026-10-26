@@ -1,13 +1,19 @@
 # Semana 4: Simulación de Monte Carlo y MCMC
 
 **Curso:** BCD5105 Modelado matemático, Lead University (III cuatrimestre 2026, virtual)
+
 **Docente:** Jordy Alfaro Brenes
+
 **Fecha:** jueves 1 de octubre de 2026
+
 **PDF fuente:** `Clases/PDFs/Semana 4 - Simulacion de Monte Carlo y MCMC 2.pdf`
+
 **Cobertura del PDF:** Completo (diapositivas 1 a 45). En clase quedaron sin resolver los ejemplos de Metropolis-Hastings (diapositiva 19) y de Bayes a mano (diapositiva 24), y todos los bloques de ejercicios como tarea moral. La actividad en salas (diapositiva 42) no se realizó.
+
 **Tramos solo del PDF:** la transcripción no toca el diagnóstico del muestreo (diapositiva 39: R-hat y ESS) ni el código de PyMC línea por línea; esas partes salen del PDF.
 
 **Contexto:** la semana 3 fue "dada una cadena, encontrar su $\pi$"; esta semana es al revés: dada una $\pi$ (el posterior), diseñar la cadena. Sigue el enfoque estocástico, y se vuelve a Python (R solo se usó en las semanas 3 y 6). La sesión tiene dos mitades: primero a mano, después en Python.
+
 **Objetivos:** explicar por qué el azar sirve para calcular cosas que no son aleatorias; estimar $\pi$, una integral y un VaR con pocos puntos y saber cuánto confiar; dar dos pasos de Metropolis-Hastings a mano; actualizar una creencia con Bayes y leer un posterior; replicarlo con NumPy y PyMC.
 
 | Bloque | Tema | Diapositivas |

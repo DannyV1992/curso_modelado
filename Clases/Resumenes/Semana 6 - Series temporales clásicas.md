@@ -1,13 +1,19 @@
 # Semana 6: Series temporales clásicas
 
 **Curso:** BCD5105 Modelado matemático, Lead University (III cuatrimestre 2026, virtual)
+
 **Docente:** Jordy Alfaro Brenes
+
 **Fecha:** jueves 15 de octubre de 2026
+
 **PDF fuente:** `Clases/PDFs/Semana 6 - Series temporales clasicas 2.pdf`
+
 **Cobertura del PDF:** Completo (diapositivas 1 a 36). La actividad en salas (diapositiva 34) no se realizó por falta de tiempo; quedó como tarea moral en el aula virtual. La diapositiva 12 es un espacio de trabajo (allí se resolvió el ejemplo 1) y los tres ejercicios de la diapositiva 13 quedan como tarea moral.
+
 **Tramos solo del PDF:** la transcripción pierde unos 38 minutos de la demostración en R (de la diapositiva 17, el `tsibble`, hasta la 27, la comparación SARIMA contra SNAIVE). Las diapositivas 17 a 27 salen del PDF, salvo lo poco que se alcanza a oír al inicio (diapositivas 15 a 17) y al final de ese tramo (diapositiva 27). La validación con ventana expansiva (diapositiva 28) sí está en la transcripción y coincide con el PDF.
 
 **Contexto:** la semana pasada terminó con `TimeSeriesSplit` y la advertencia de no barajar datos con reloj; esta semana ese reloj pasa a ser el protagonista. Es menos matemática a mano que en las semanas anteriores (la matemática de las series de tiempo es pesada de hacer a mano) y más conceptual y aplicada. Un curso completo de series de tiempo dura uno o dos semestres: aquí se condensa en una sesión. La clase tiene dos partes: las ideas y el flujo completo en **R** con `fpp3` (R es un lenguaje hecho para estadísticos y se presta muy bien a series; en Python, `statsmodels` tiene STL y SARIMAX con la misma lógica).
+
 **Objetivos:** reconocer tendencia, estacionalidad, ciclo y ruido; explicar qué es una serie estacionaria y cómo la diferenciación la consigue; leer una ACF y traducir ARIMA y SARIMA a palabras; descomponer, modelar, diagnosticar y pronosticar una serie con `fpp3`; validar un pronóstico sin hacer trampa y compararlo con un modelo ingenuo.
 
 | Bloque | Tema | Diapositivas |

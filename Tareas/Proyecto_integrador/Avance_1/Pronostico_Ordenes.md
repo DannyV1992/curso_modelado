@@ -145,10 +145,6 @@ El total del trimestre es casi el mismo con SARIMA y con el ingenuo (13,352 y 13
 
 Para la entrega final se probará un segundo método que atienda lo que falló: el cambio de nivel del acero y los pocos datos. Se propone un **modelo de fundación (Chronos-2)**: se usa sin entrenamiento, lo que conviene con 45 meses, y admite covariables (Ansari et al., 2024), como la proporción de órdenes de acero y los días hábiles. Se evaluará con las mismas 19 ventanas y el mismo MASE, y se compararán con Prophet (Taylor y Letham, 2018) como contraste y con el ajuste por días hábiles de la sección 6. A mediano plazo se pasará al **pronóstico diario**: una exploración preliminar con 1,394 días (notebook aparte) muestra una estacionalidad semanal fuerte (0.89), de lunes a jueves unas 200 a 230 órdenes por día y fines de semana cerca de 25, y caídas marcadas en feriados de EE. UU., que el modelo mensual no puede capturar. También se confirmará con operaciones cómo se reabre el producto de acero, porque cambia el nivel esperado de los próximos meses.
 
-# Declaración sobre el uso de inteligencia artificial
-
-Se utilizó Claude (Anthropic), mediante Claude Code, para consultar la base de datos de la empresa y exportar la serie, escribir y depurar el código del notebook, y redactar un borrador de este documento a partir de las instrucciones del avance y de los resúmenes de las clases 5 a 7. Los resultados numéricos provienen de la ejecución del notebook adjunto. _(Completar: el grupo revisó, verificó y puede explicar cada parte del documento y del código; indicar aquí quién hizo qué.)_
-
 # Referencias
 
 Ansari, A. F., Stella, L., Turkmen, C., Zhang, X., Mercado, P., Shen, H., Shchur, O., Rangapuram, S. S., Arango, S. P., Kapoor, S., Zschiegner, J., Maddix, D. C., Wang, H., Mahoney, M. W., Torkkola, K., Wilson, A. G., Bohlke-Schneider, M., & Wang, Y. (2024). Chronos: Learning the language of time series. *Transactions on Machine Learning Research*. https://arxiv.org/abs/2403.07815

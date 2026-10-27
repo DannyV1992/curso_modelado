@@ -4,39 +4,36 @@ title: "Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics
 
 <!-- PORTADA (no cuenta en el límite de páginas) -->
 
-**[Insertar logo de Lead University]**
-
 **Curso:** Modelado matemático (BCD5105), III Cuatrimestre 2026
 
 **Proyecto integrador:** Avance 1, planteamiento y primer modelo
 
 **Título:** Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics mediante series temporales
 
-**Integrantes:** _(nombres completos)_
+**Integrantes:**
+
+- Daniel Vasquez Gonzalez
+- Santiago Villareal Arley
+- Maria José Gonzalez Quesada
+- Sharis Duarte Alvarado
 
 **Fecha de entrega:** 29 de octubre de 2026
 
-**Notebook de Colab (permiso de lectura):** _(pegar el enlace compartido)_
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-\newpage
+**Notebook (Python, lectura pública):** [GitHub](https://github.com/DannyV1992/curso_modelado/blob/main/Tareas/Proyecto_integrador/Avance_1/Notebook_Avance_Forecast_Mensual.ipynb) · [abrir en Colab](https://colab.research.google.com/github/DannyV1992/curso_modelado/blob/main/Tareas/Proyecto_integrador/Avance_1/Notebook_Avance_Forecast_Mensual.ipynb)
 
 # 1. Introducción y planteamiento del problema
 
-LightForce Orthodontics es una empresa de EE. UU. (fundada en 2019) que fabrica aparatos ortodónticos totalmente personalizados con impresión 3D y CAD/CAM, y que vende solo a ortodoncistas. Cada pedido nace cuando el doctor envía el escaneo digital del paciente por el portal; el caso se registra en el sistema de manufactura y pasa por segmentación, planificación del tratamiento, aprobación del doctor, diseño, impresión y envío. Como cada caso es único, el trabajo no se puede inventariar: la carga de manufactura depende de cuántos escaneos llegan.
+LightForce Orthodontics es una empresa de EE. UU. (fundada en 2019) que fabrica aparatos ortodónticos totalmente personalizados con impresión 3D y CAD/CAM, y que vende solo a ortodoncistas. Cada pedido nace cuando el doctor envía el escaneo digital de la dentadura del paciente; el caso se registra en el sistema de manufactura y pasa por distintas etapas de diseño digital hasta la manufactura fisica y envío. Como cada caso es único, el trabajo no se puede inventariar: la carga de manufactura depende de cuántos escaneos llegan.
 
-El problema que se aborda es **pronosticar cuántas órdenes entrantes (escaneos recibidos) llegarán cada mes durante los próximos tres meses**. Una orden entrante es un caso nuevo con escaneo recibido; los reórdenes quedan fuera. El volumen mensual ronda las 4,700 órdenes desde 2024, pero en 2026 se movió entre 4,095 y 6,032 por el lanzamiento de un producto nuevo, el bracket de acero inoxidable: se habilitó de forma progresiva, la demanda superó la capacidad de las máquinas y se detuvo su recepción para ajustar la capacidad durante el último trimestre (información de operaciones; los datos de la sección 4 son consistentes con ella).
+El problema que se aborda es **pronosticar cuántas órdenes entrantes (escaneos recibidos) llegarán cada mes durante los próximos tres meses**. Una orden entrante es un caso nuevo con escaneo recibido. El volumen mensual ronda las 4,700 órdenes desde 2024, pero en 2026 se movió entre 4,095 y 6,032 por el lanzamiento de un producto nuevo, el bracket de acero inoxidable: se habilitó de forma progresiva, la demanda superó la capacidad de las máquinas y se detuvo su recepción para ajustar la capacidad durante el último trimestre.
 
-El contexto costarricense es directo. Tres de los cuatro supervisores de manufactura digital trabajan en Costa Rica y desde aquí se atiende a los clientes de EE. UU. y Canadá. La demanda la determinan los doctores del norte, pero la capacidad la aporta un equipo en Costa Rica, de modo que anticipar el volumen mensual es una entrada directa para planificar turnos, horas extra y vacaciones. A mediano plazo el objetivo es un pronóstico diario; este avance parte de la escala mensual, más simple y apropiada para construir un primer modelo con los métodos del curso.
+El contexto costarricense es directo. Tres de los cuatro supervisores de manufactura digital trabajan en Costa Rica y desde aquí se atiende a los clientes de EE. UU. y Canadá. La demanda la determinan los doctores del norte, pero la capacidad la aportan los equipos en Costa Rica, de modo que anticipar el volumen mensual es una entrada directa para planificar turnos, horas extra, vacaciones, contrataciones, etc. A mediano plazo el objetivo es un pronóstico diario; este avance parte de la escala mensual, más simple y apropiada para construir un primer modelo con los métodos del curso.
 
 # 2. Justificación
 
-Un pronóstico de tres meses ayuda a decidir con tiempo cuánta capacidad se necesita. Si la demanda supera lo previsto, los casos esperan en cola y se alargan los tiempos de ciclo (SLA) que la empresa monitorea; si queda por debajo, hay horas pagadas sin trabajo. Además, las cuentas de cada doctor están asignadas a un equipo específico (Prism), por lo que un exceso de casos no se reparte automáticamente entre equipos y conviene anticiparlo.
+Un pronóstico de tres meses ayuda a decidir con tiempo cuánta capacidad se necesita. Si la demanda supera lo previsto, los casos esperan en cola y se alargan los tiempos de ciclo y SLAs que la empresa monitorea; si queda por debajo, hay horas pagadas sin trabajo. Además, las cuentas de cada doctor están asignadas a un equipo específico, por lo que un exceso de casos no se reparte automáticamente entre equipos y conviene anticiparlo.
 
-Se benefician los supervisores y planificadores de manufactura digital, que toman las decisiones de dotación; los técnicos en Costa Rica, que enfrentan menos picos y valles; y los doctores, que reciben antes su plan de tratamiento. El impacto económico no se cuantifica en este avance; lo que se mide es cuánto mejora el pronóstico respecto de una regla simple y cuándo falla.
+Se benefician los supervisores y planificadores de manufactura digital, que toman las decisiones de dotación; los técnicos en Costa Rica, cuya carga de trabajo sería más estable; y los doctores, que reciben antes su plan de tratamiento. El impacto económico no se cuantifica en este avance; lo que se mide es cuánto mejora el pronóstico respecto de una regla simple y cuándo falla.
 
 # 3. Objetivos
 
@@ -147,6 +144,10 @@ El total del trimestre es casi el mismo con SARIMA y con el ingenuo (13,352 y 13
 # 7. Próximos pasos
 
 Para la entrega final se probará un segundo método que atienda lo que falló: el cambio de nivel del acero y los pocos datos. Se propone un **modelo de fundación (Chronos-2)**: se usa sin entrenamiento, lo que conviene con 45 meses, y admite covariables (Ansari et al., 2024), como la proporción de órdenes de acero y los días hábiles. Se evaluará con las mismas 19 ventanas y el mismo MASE, y se compararán con Prophet (Taylor y Letham, 2018) como contraste y con el ajuste por días hábiles de la sección 6. A mediano plazo se pasará al **pronóstico diario**: una exploración preliminar con 1,394 días (notebook aparte) muestra una estacionalidad semanal fuerte (0.89), de lunes a jueves unas 200 a 230 órdenes por día y fines de semana cerca de 25, y caídas marcadas en feriados de EE. UU., que el modelo mensual no puede capturar. También se confirmará con operaciones cómo se reabre el producto de acero, porque cambia el nivel esperado de los próximos meses.
+
+# Declaración sobre el uso de inteligencia artificial
+
+Se utilizó Claude (Anthropic), mediante Claude Code, para consultar la base de datos de la empresa y exportar la serie, escribir y depurar el código del notebook, y redactar un borrador de este documento a partir de las instrucciones del avance y de los resúmenes de las clases 5 a 7. Los resultados numéricos provienen de la ejecución del notebook adjunto. _(Completar: el grupo revisó, verificó y puede explicar cada parte del documento y del código; indicar aquí quién hizo qué.)_
 
 # Referencias
 

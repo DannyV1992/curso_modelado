@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 22 de octubre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 7 - Series temporales modernas 2.pdf`
+**PDF fuente:** `Clases/PDFs/7 - Series temporales modernas 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 29). La diapositiva 12 es un espacio de trabajo (allí se resolvió el ejemplo 1), los ejercicios de la diapositiva 13 quedan como tarea moral y la práctica en salas (diapositiva 29) se inició pero no se terminó.
 

@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 17 de setiembre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 2 - Modelos con ecuaciones diferenciales 2.pdf`
+**PDF fuente:** `Clases/PDFs/2 - Modelos con ecuaciones diferenciales 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 53).
 

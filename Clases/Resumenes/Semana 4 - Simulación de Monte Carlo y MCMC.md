@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 1 de octubre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 4 - Simulacion de Monte Carlo y MCMC 2.pdf`
+**PDF fuente:** `Clases/PDFs/4 - Simulacion de Monte Carlo y MCMC 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 45). En clase quedaron sin resolver los ejemplos de Metropolis-Hastings (diapositiva 19) y de Bayes a mano (diapositiva 24), y todos los bloques de ejercicios como tarea moral. La actividad en salas (diapositiva 42) no se realizó.
 

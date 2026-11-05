@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 15 de octubre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 6 - Series temporales clasicas 2.pdf`
+**PDF fuente:** `Clases/PDFs/6 - Series temporales clasicas 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 36). La actividad en salas (diapositiva 34) no se realizó por falta de tiempo; quedó como tarea moral en el aula virtual. La diapositiva 12 es un espacio de trabajo (allí se resolvió el ejemplo 1) y los tres ejercicios de la diapositiva 13 quedan como tarea moral.
 

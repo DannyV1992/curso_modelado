@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 24 de setiembre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 3 - Cadenas y procesos de Markov 2.pdf`
+**PDF fuente:** `Clases/PDFs/3 - Cadenas y procesos de Markov 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 44). El ejemplo 2 de la propiedad de Markov quedó como tarea moral y la actividad en salas no se realizó en clase (solo se mostró el documento).
 

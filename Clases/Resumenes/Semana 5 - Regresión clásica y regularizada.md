@@ -6,7 +6,7 @@
 
 **Fecha:** jueves 8 de octubre de 2026
 
-**PDF fuente:** `Clases/PDFs/Semana 5 - Regresion clasica y regularizada 2.pdf`
+**PDF fuente:** `Clases/PDFs/5 - Regresion clasica y regularizada 2.pdf`
 
 **Cobertura del PDF:** Completo (diapositivas 1 a 52). Según la transcripción no se trabajaron los ejemplos de las diapositivas 13, 21 y 26 ni el ejemplo 1 de la 7 (las soluciones que aparecen aquí se calcularon a partir del enunciado), y todos los bloques de ejercicios quedan como tarea moral. La actividad en salas (diapositiva 49) no se realizó; quedó como actividad complementaria en el aula virtual. Las diapositivas 8, 14, 22 y 27 son espacios de trabajo en blanco.
 

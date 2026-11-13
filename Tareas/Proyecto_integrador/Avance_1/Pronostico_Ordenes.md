@@ -1,5 +1,5 @@
 ---
-title: "Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics mediante series temporales"
+title: "Pronóstico de las órdenes entrantes de LightForce Orthodontics: comparación de modelos clásicos y de fundación"
 ---
 
 <!-- PORTADA (no cuenta en el límite de páginas) -->
@@ -8,7 +8,9 @@ title: "Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics
 
 **Proyecto integrador:** Avance 1, planteamiento y primer modelo
 
-**Título:** Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics mediante series temporales
+**Título:** Pronóstico de las órdenes entrantes de LightForce Orthodontics: comparación de modelos clásicos y de fundación
+
+**Grupo:** 2
 
 **Integrantes:**
 
@@ -23,137 +25,187 @@ title: "Pronóstico mensual de las órdenes entrantes de LightForce Orthodontics
 
 # 1. Introducción y planteamiento del problema
 
-LightForce Orthodontics es una empresa de EE. UU. (fundada en 2019) que fabrica aparatos ortodónticos totalmente personalizados con impresión 3D y CAD/CAM, y que vende solo a ortodoncistas. Cada pedido nace cuando el doctor envía el escaneo digital de la dentadura del paciente; el caso se registra en el sistema de manufactura y pasa por distintas etapas de diseño digital hasta la manufactura fisica y envío. Como cada caso es único, el trabajo no se puede inventariar: la carga de manufactura depende de cuántos escaneos llegan.
+## 1.1 La empresa
 
-El problema que se aborda es **pronosticar cuántas órdenes entrantes (escaneos recibidos) llegarán cada mes durante los próximos tres meses**. Una orden entrante es un caso nuevo con escaneo recibido. El volumen mensual ronda las 4,700 órdenes desde 2024, pero en 2026 se movió entre 4,095 y 6,032 por el lanzamiento de un producto nuevo, el bracket de acero inoxidable: se habilitó de forma progresiva, la demanda superó la capacidad de las máquinas y se detuvo su recepción para ajustar la capacidad durante el último trimestre.
+La ortodoncia es la rama de la odontología que corrige la posición de los dientes. El tratamiento más común usa *brackets*: piezas pequeñas que el ortodoncista pega a cada diente y por las que pasa un alambre que, con los meses, lleva los dientes a su lugar. Normalmente los brackets salen de fábrica iguales para todos los pacientes, y el ortodoncista hace los ajustes durante el tratamiento.
 
-El contexto costarricense es directo. Tres de los cuatro supervisores de manufactura digital trabajan en Costa Rica y desde aquí se atiende a los clientes de EE. UU. y Canadá. La demanda la determinan los doctores del norte, pero la capacidad la aportan los equipos en Costa Rica, de modo que anticipar el volumen mensual es una entrada directa para planificar turnos, horas extra, vacaciones, contrataciones, etc. A mediano plazo el objetivo es un pronóstico diario; este avance parte de la escala mensual, más simple y apropiada para construir un primer modelo con los métodos del curso.
+LightForce Orthodontics es una empresa de EE. UU., fundada en 2019, que fabrica brackets personalizados: cada pieza se diseña por computadora para un diente concreto de un paciente y se imprime en 3D. La empresa vende solo a ortodoncistas (en adelante, "doctores") de EE. UU., Canadá, Australia y Nueva Zelanda.
+
+Cada caso sigue el mismo camino. El doctor toma un escaneo digital de la boca del paciente, un modelo 3D de sus dientes, y lo envía a LightForce; ese envío es una **orden entrante**. Después, un equipo de técnicos de manufactura digital diseña los brackets del caso, la planta los imprime y se envían al consultorio. Tres de los cuatro supervisores de manufactura digital y sus equipos trabajan en Costa Rica. Como cada caso es distinto, el trabajo no se puede adelantar ni guardar en inventario: la carga de cada semana depende de cuántos escaneos lleguen.
+
+## 1.2 El bracket de acero inoxidable
+
+Hasta 2025 la empresa trabajaba casi solo con brackets cerámicos, y el volumen rondaba las 4,700 órdenes por mes. Entonces agregó a su catálogo un bracket de acero inoxidable. En 2025 hubo solo casos aislados (54 en el año), pero desde febrero de 2026 la demanda creció rápido: de 63 órdenes en febrero a 1,627 en junio y unas 1,800 en julio y agosto, cerca de un tercio de todas las órdenes del mes.
+
+Ese crecimiento superó la capacidad de las máquinas que fabrican el acero. Por eso, a fines de agosto de 2026 la empresa dejó de aceptar casos de acero, y la recepción se reabrió el 26 de octubre; desde entonces llegan unas 47 órdenes de acero por día. El total de órdenes siguió esas decisiones: de junio a agosto promedió 5,734 por mes, 22 % más que de octubre de 2025 a abril de 2026, y en septiembre y octubre, con el acero cerrado, bajó a 4,104, 12 % menos. Al mismo tiempo, los demás brackets bajaron desde mayo, señal de que parte de los casos de acero reemplazó casos que antes habrían sido cerámicos.
+
+Para pronosticar, esto significa que la serie de 2026 tiene saltos causados por decisiones internas de capacidad, no por cambios en la demanda de los doctores, y ningún modelo basado solo en la historia puede anticiparlos.
+
+## 1.3 Planteamiento del problema
+
+Los supervisores necesitan saber con anticipación cuántas órdenes van a llegar para decidir cuántas personas trabajan en cada turno, cuándo pedir horas extra, cuándo aprobar vacaciones y si hay que contratar. Como los equipos están en Costa Rica, todas las fechas se expresan en hora de Costa Rica, aunque los escaneos llegan de cuatro países con horarios y feriados propios.
+
+Este proyecto busca estimar esa cantidad, es decir, hacer un **pronóstico**: una estimación de las órdenes futuras a partir de las pasadas. Tiene dos partes:
+
+- **Parte 1, este avance: pronóstico mensual a tres meses.** Cuántas órdenes entrantes llegarán en cada uno de los próximos tres meses. Se comparan los modelos estadísticos clásicos vistos en el curso, que se ajustan a la historia de la empresa, con **modelos de fundación**: modelos de inteligencia artificial preentrenados con miles de series de otros ámbitos, que pronostican sin entrenarse con estos datos.
+- **Parte 2, próxima entrega (sección 7): pronóstico diario a 15 días.** Cuántas órdenes llegarán cada día de las próximas dos semanas. El conteo diario varía mucho según el día de la semana y los feriados de cada país, mientras que el mensual suma esas variaciones y es más estable. La pregunta es si conviene **repartir el pronóstico mensual entre los días** según el patrón semanal y los feriados, en lugar de pronosticar cada día directamente.
 
 # 2. Justificación
 
-Un pronóstico de tres meses ayuda a decidir con tiempo cuánta capacidad se necesita. Si la demanda supera lo previsto, los casos esperan en cola y se alargan los tiempos de ciclo y SLAs que la empresa monitorea; si queda por debajo, hay horas pagadas sin trabajo. Además, las cuentas de cada doctor están asignadas a un equipo específico, por lo que un exceso de casos no se reparte automáticamente entre equipos y conviene anticiparlo.
-
-Se benefician los supervisores y planificadores de manufactura digital, que toman las decisiones de dotación; los técnicos en Costa Rica, cuya carga de trabajo sería más estable; y los doctores, que reciben antes su plan de tratamiento. El impacto económico no se cuantifica en este avance; lo que se mide es cuánto mejora el pronóstico respecto de una regla simple y cuándo falla.
+Un pronóstico de tres meses permite decidir con tiempo cuánta capacidad se necesita, y uno de 15 días, armar los turnos de las próximas dos semanas. Si la demanda supera lo previsto, los casos esperan en cola, cada uno tarda más y se incumplen los plazos de entrega comprometidos con los doctores; si queda por debajo, hay horas pagadas sin trabajo. Se benefician los supervisores y planificadores, que deciden la dotación; los técnicos, con una carga más estable; y los doctores, que reciben antes su plan de tratamiento. Además, conviene saber si los modelos de fundación, que no requieren entrenamiento, superan a reglas simples con una serie corta.
 
 # 3. Objetivos
 
-**Objetivo general.** Modelar y pronosticar el número mensual de órdenes entrantes de LightForce Orthodontics entre enero de 2023 y septiembre de 2026 con un modelo SARIMA, y evaluar si supera de forma consistente al pronóstico ingenuo estacional, para apoyar la planificación de capacidad con un horizonte de tres meses.
+**Objetivo general.** Identificar el modelo que mejor pronostica las órdenes entrantes de LightForce Orthodontics a dos escalas, mensual a tres meses y diaria a 15 días, comparando modelos clásicos y de fundación con una validación común, y determinar si repartir el pronóstico mensual entre los días supera a modelar directamente la serie diaria.
 
-**Objetivos específicos.**
+**Objetivos específicos de la parte 1, pronóstico mensual (este avance).**
 
-1. Construir la serie mensual de órdenes entrantes (45 meses) a partir de la tabla de órdenes de manufactura y documentar su definición.
-2. Caracterizar la tendencia, la estacionalidad anual y el efecto del lanzamiento del bracket de acero inoxidable mediante estadísticas descriptivas, autocorrelación y descomposición STL.
-3. Ajustar un SARIMA con período 12 y compararlo con el ingenuo estacional y AutoETS mediante MAE, RMSE y MASE, con validación de ventana expansiva (19 ventanas de tres meses).
-4. Diagnosticar los residuos e identificar las limitaciones del modelo, para definir el segundo método de la entrega final.
+1. Construir la serie diaria y mensual de órdenes entrantes en hora de Costa Rica, total y por país (enero de 2023 a octubre de 2026), documentar su definición e incluirla en el repositorio para que el análisis sea reproducible.
+2. Caracterizar la tendencia, la estacionalidad anual, el efecto de los días hábiles y el del bracket de acero mediante estadísticas descriptivas, autocorrelación y descomposición STL.
+3. Comparar 12 modelos (ingenuos, ETS, SARIMA, sus versiones por día hábil, Ridge, Prophet, Chronos-2 y TimesFM) con validación de ventana expansiva de 20 orígenes, mediante MAE, RMSE, MASE y la prueba de Wilcoxon contra el ingenuo estacional.
+4. Emitir el pronóstico de noviembre de 2026 a enero de 2027 con el mejor modelo e intervalos empíricos.
+
+**Objetivos específicos de la parte 2, pronóstico diario (próxima entrega).**
+
+5. Estimar el patrón diario de cada país: el perfil por día de la semana y el efecto de sus feriados locales, llevados a la fecha de Costa Rica.
+6. Repartir el pronóstico mensual del mejor modelo entre los días del mes según ese patrón, también cuando el pronóstico se emite a mitad de mes.
+7. Comparar modelos diarios directos (SNAIVE semanal, ETS, SARIMA, MSTL, Prophet, Chronos-2, TimesFM y LightGBM) y un híbrido con el reparto, a 15 días y con validación de ventana expansiva semanal.
+8. Contrastar la hipótesis con el MASE diario, el error del total de 15 días y el error en feriados, mediante la prueba de Wilcoxon pareada, y emitir el pronóstico diario de los 15 días siguientes.
 
 # 4. Dataset y análisis exploratorio
 
-**Fuente.** Base de datos analítica de LightForce Orthodontics (Databricks), tabla `analytics.manufacturing.mfg_all_orders`, consultada el 26 de octubre de 2026 con autorización de la empresa. Es una fuente interna, sin enlace público; la consulta SQL y la serie resultante (45 filas) están en el notebook. Cada fila de la tabla es un caso de manufactura.
+**Fuente.** Base de datos analítica de LightForce Orthodontics (Databricks), tabla `analytics.manufacturing.mfg_all_orders`, consultada el 12 de noviembre de 2026 con autorización de la empresa. Como la base es interna, el resultado de la consulta (conteos por día, sin casos individuales) se guarda en el repositorio (`datos/ordenes_diarias.csv`, 1,411 días) junto con la consulta SQL.
 
-**Definición y período.** Una orden entrante es un caso nuevo (`order_type = 'New case'`) con fecha de recepción del escaneo (`scan_received_date`), pasada de UTC a hora del este de EE. UU. antes de asignar el mes. Se cuentan todos los estados, incluso casos luego cancelados, porque la demanda llegó. El período es enero de 2023 a septiembre de 2026 (45 meses, 207,214 órdenes). Se excluyen 2019 a 2022, años de rampa de crecimiento (66 casos en 2019 y 29,139 en 2022; desde 2023 el volumen anual está entre 49,000 y 57,000). Octubre de 2026 solo tiene datos hasta el día 25 (3,036 órdenes), por lo que no se usa en el ajuste.
+**Definición y período.** Una orden entrante es un caso nuevo (`order_type = 'New case'`) con fecha de recepción del escaneo (`scan_received_date`). Se cuentan todos los estados, incluso casos luego cancelados. La fecha viene en UTC y se pasa a hora de Costa Rica (UTC−6), donde se atienden los casos; a escala mensual el cambio es pequeño (17 órdenes por mes en promedio). La serie mensual va de enero de 2023 a octubre de 2026 (46 meses, 211,325 órdenes); se excluyen 2019 a 2022, años de rampa, y noviembre de 2026, incompleto (2,033 órdenes al día 11).
 
-| Variable | Tipo | Unidad | Descripción |
-|---|---|---|---|
-| `mes` | Fecha (índice) | Mes calendario, hora ET | Mes en que se recibió el escaneo |
-| `ordenes` | Entero, no negativo | Órdenes por mes | Casos nuevos con escaneo recibido (variable a pronosticar) |
-| `acero` | Entero, no negativo | Órdenes por mes | De ellas, las de bracket de acero inoxidable (`bracket_material_name`) |
-| `dias_habiles` | Entero (derivada) | Días, lunes a viernes | Días hábiles del mes, entre 20 y 23 |
+| Variable | Tipo y unidad | Descripción |
+|----------------------|--------------------------------|----------------------------------------------|
+| `fecha` | Fecha (día, hora de Costa Rica) | Día en que se recibió el escaneo |
+| `ordenes` | Entero ≥ 0, órdenes | Casos nuevos con escaneo recibido (a pronosticar) |
+| `acero` | Entero ≥ 0, órdenes | De ellas, con bracket de acero inoxidable |
+| `us`, `ca`, `au`, `nz` | Entero ≥ 0, órdenes | Por país de la cuenta (Puerto Rico en EE. UU.) |
+| `dias_habiles` | Entero, días (derivada) | Lunes a viernes del mes, entre 20 y 23 |
 
 Tabla 1. Variables del conjunto de datos.
 
-**Estadísticas descriptivas.** La media mensual es 4,605 órdenes (mediana 4,734; desviación 547; coeficiente de variación 0.12), con mínimo de 3,294 (febrero de 2023) y máximo de 6,032 (junio de 2026). Los totales anuales son 49,084 (2023; 4,090 por mes), 55,879 (2024; 4,657), 56,648 (2025; 4,721) y 45,603 de enero a septiembre de 2026 (5,067 por mes).
+**Estadísticas descriptivas.** La media mensual es 4,594 órdenes (mediana 4,731; desviación 544; coeficiente de variación 0.12), con mínimo de 3,363 (febrero de 2023) y máximo de 6,039 (junio de 2026). Los totales anuales son 49,084 (2023), 55,879 (2024), 56,647 (2025) y 49,715 de enero a octubre de 2026 (4,972 por mes). Por país, EE. UU. aporta entre 65 % y 70 %, Canadá entre 22 % y 25 %, Australia entre 7 % y 9 % y Nueva Zelanda entre 1 % y 2 %.
 
-![Figura 1. Órdenes mensuales según el tipo de bracket.](figuras/fig1_serie_mensual.png){width=82%}
+![Figura 1. Órdenes mensuales según el tipo de bracket.](figuras/fig1_serie_mensual.png){width=58%}
 
-**Figura 1.** Tras crecer durante 2023, el volumen se estabiliza desde 2024 entre 3,900 y 5,200 órdenes por mes. En 2026 aparece el bracket de acero: 63 órdenes en febrero, 352 en abril, 1,625 en junio (27 % del mes) y 1,829 en julio (32 %); luego cae a 117 en septiembre (3 %). El total de junio a agosto promedia 5,735, un 22 % sobre el promedio de octubre de 2025 a abril de 2026 (4,683), y septiembre (4,095) queda 13 % debajo. Las órdenes del resto de brackets oscilan entre 3,721 y 4,407 de mayo a septiembre de 2026, bajo el rango de 4,145 a 5,158 de los diez meses previos, lo que sugiere que parte del acero sustituyó a otros productos (hipótesis que no se prueba aquí). **Implicación:** el auge y la caída de 2026 son una decisión de capacidad, no una variación natural de la demanda, y los modelos deben evaluarse por separado en ese tramo. La serie no se recorta ni se ajusta: son órdenes realmente recibidas.
+**Figura 1.** El volumen se estabiliza en 2024 y 2025 entre 3,920 y 5,161 órdenes por mes. En 2026 se ven el auge y la pausa del acero descritos en la sección 1: llega al 27 % del mes en junio y al 32 % en julio y agosto, y cae a 118 órdenes en septiembre. **Implicación:** el acero se trata como un cambio de nivel externo; no se modela y la validación se separa en marzo de 2026 para medir su efecto.
 
-![Figura 2. Perfil anual: un trazo por año.](figuras/fig2_perfil_anual.png){width=82%}
+![Figura 2. Perfil anual: un trazo por año.](figuras/fig2_perfil_anual.png){width=58%}
 
-**Figura 2.** Los trazos de 2024 y 2025 son casi iguales: los meses más bajos son noviembre (índice 0.89 respecto del promedio de su año) y diciembre (0.86), y los más altos enero, junio, julio y octubre (1.05 a 1.08). 2023 queda más abajo por el crecimiento, y 2026 se separa a partir de mayo. **Implicación:** hay un patrón anual repetible pero de amplitud moderada (cerca de ±10 %), por lo que repetir el mismo mes del año anterior será una referencia difícil de superar.
+**Figura 2.** Los trazos de 2024 y 2025 son casi iguales: los meses más bajos son noviembre (índice 0.89 respecto del promedio de su año) y diciembre (0.86), y los más altos enero y junio (1.06), julio (1.08) y octubre (1.05). **Implicación:** el patrón anual es repetible y de amplitud moderada (±10 %), así que repetir el mes del año anterior será una referencia difícil de superar. Parte de esas diferencias se debe a los días hábiles (20 a 23, ±7 %), lo que motiva el ajuste por día hábil.
 
-![Figura 3. Descomposición STL (período 12, componente anual fijo).](figuras/fig3_stl.png){width=82%}
+![Figura 3. Descomposición STL robusta (período 12, componente anual fijo).](figuras/fig3_stl.png){width=58%}
 
-**Figura 3.** La fuerza de la tendencia es 0.65 y la de la estacionalidad anual 0.51 (escala de 0 a 1), es decir, moderadas. La tendencia sube en 2023, se aplana en torno a 4,700 y vuelve a subir en 2026. El resto más grande es septiembre de 2026 (−1,021 órdenes), la caída del acero. La autocorrelación es 0.50 en el rezago 1, 0.35 en el 2 y solo 0.16 en el 12. **Implicación:** la dependencia entre meses vecinos es más clara que la estacional, y con solo 45 meses (menos de cuatro ciclos) la estacionalidad se estima con poca precisión. Las pruebas de raíz unitaria no coinciden sobre la serie original (ADF p = 0.002; KPSS p = 0.02), pero sí tras la diferencia estacional (ADF p = 0.006; KPSS p ≥ 0.10).
+**Figura 3.** La fuerza de la tendencia es 0.38 y la de la estacionalidad anual 0.28 (de 0 a 1), debilitadas por los restos de septiembre (−1,058) y octubre de 2026 (−1,614), efecto de la pausa del acero. La autocorrelación es 0.51 en el rezago 1 y 0.15 en el 12. **Implicación:** con menos de cuatro ciclos la estacionalidad se estima con poca precisión. ADF y KPSS no coinciden sobre la serie original (p = 0.002 y 0.02) y sí tras $(1-B)(1-B^{12})$ (p < 0.001 y ≥ 0.10).
 
 # 5. Formulación matemática inicial
 
-**Variables.** Sea $y_t \in \mathbb{N}$ el número de órdenes entrantes del mes $t$, con $t = 1, \dots, T$ y $T = 45$. Se busca el pronóstico $\hat y_{T+h \mid T}$ para $h = 1, 2, 3$. El período estacional es $m = 12$ y $B$ es el operador de rezago ($B y_t = y_{t-1}$).
+**Variables.** Sea $y_t \in \mathbb{N}$ el número de órdenes del mes $t$, con $t = 1, \dots, T$ y $T = 46$, y $d_t$ sus días hábiles (lunes a viernes). Se busca $\hat y_{T+h \mid T}$ para $h = 1, 2, 3$. El período estacional es $m = 12$ y $B$ es el operador de rezago.
 
-**Modelo.** Un SARIMA$(p,d,q)(P,D,Q)_m$ cumple
+**Modelos comparados.**
 
-$$\phi(B)\,\Phi(B^m)\,(1-B)^d(1-B^m)^D\, y_t = c + \theta(B)\,\Theta(B^m)\,\varepsilon_t, \qquad \varepsilon_t \sim (0, \sigma^2),$$
+- *Referencias.* Ingenuo: $\hat y_{T+h} = y_T$. Ingenuo estacional (SNAIVE): $\hat y_{T+h} = y_{T+h-12}$.
+- *ETS y SARIMA.* AutoETS elige error, tendencia y estacionalidad por AICc. El SARIMA$(p,d,q)(P,D,Q)_{12}$ cumple
+$$\phi(B)\,\Phi(B^{12})\,(1-B)^d(1-B^{12})^D\, y_t = c + \theta(B)\,\Theta(B^{12})\,\varepsilon_t,$$
+con órdenes elegidos por AutoARIMA (pruebas de raíz unitaria y AICc) y coeficientes por máxima verosimilitud.
+- *Ajuste por días hábiles* (sufijo `_dh`). Se modela la tasa $r_t = y_t / d_t$ con el mismo método y se vuelve a órdenes con $\hat y_{T+h} = d_{T+h}\,\hat r_{T+h}$. Para SNAIVE_dh, $\hat y_{T+h} = d_{T+h}\; y_{T+h-12} / d_{T+h-12}$.
+- *Ridge.* $y_t = \beta_0 + \beta_1 t + \sum_{j=2}^{12} \gamma_j\, \mathbb{1}[\text{mes}(t)=j] + \delta\, d_t + \varepsilon_t$, con coeficientes que minimizan $\sum_t (y_t - \hat y_t)^2 + \lambda \lVert \beta \rVert^2$ (Hoerl y Kennard, 1970) y $\lambda$ elegido por validación temporal.
+- *Prophet.* $y_t = g(t) + s(t) + \varepsilon_t$: tendencia lineal por tramos y estacionalidad anual de Fourier (Taylor y Letham, 2018).
+- *Fundación.* $\hat y_{T+h}$ es la mediana de $f_\theta(y_1,\dots,y_T)$, con $\theta$ preentrenado en miles de series y sin ajuste a estos datos: Chronos-2 (Ansari et al., 2025), también con $d_t$ como covariable conocida, y TimesFM 2.5 (Das et al., 2024).
 
-donde $\phi$, $\theta$, $\Phi$ y $\Theta$ son polinomios de grados $p$, $q$, $P$ y $Q$. Los órdenes se identifican con AutoARIMA (pruebas de raíz unitaria para $d$ y $D$, y criterio AICc para el resto) y los coeficientes se estiman por máxima verosimilitud. Con los 45 meses se obtiene SARIMA$(1,1,0)(0,1,0)_{12}$, es decir,
-
-$$(1-\phi_1 B)(1-B)(1-B^{12})\,y_t = \varepsilon_t.$$
-
-En palabras: el cambio de un mes al siguiente, medido contra el mismo cambio un año antes, depende del cambio del mes anterior.
-
-**Restricciones.** (i) $y_t \ge 0$: todo pronóstico se trunca en cero, $\hat y^{+}_{t} = \max(0, \hat y_t)$. (ii) Estacionariedad e invertibilidad: las raíces de los polinomios quedan fuera del círculo unitario. (iii) Validación sin fuga: cada pronóstico usa solo datos anteriores a su origen, y el orden se vuelve a identificar en cada ventana.
+**Restricciones.** (i) $y_t \ge 0$: todo pronóstico se trunca en cero, $\hat y^{+}_{t} = \max(0, \hat y_t)$. (ii) En SARIMA, estacionariedad e invertibilidad: las raíces de los polinomios quedan fuera del círculo unitario. (iii) Validación sin fuga: cada pronóstico usa solo datos anteriores a su origen, y cada modelo se vuelve a ajustar (y el SARIMA a identificar) en cada ventana.
 
 **Supuestos y su justificación.**
 
-- *Período anual fijo ($m = 12$).* Está respaldado solo en parte: la fuerza estacional es 0.51 y el índice de 2024 y 2025 es casi idéntico (Figura 2), pero la ACF en el rezago 12 es 0.16.
-- *Estacionariedad tras diferenciar.* ADF y KPSS coinciden en que $(1-B^{12})y_t$ es estacionaria (sección 4).
-- *Innovaciones no correlacionadas y aproximadamente normales.* Se verifica con Ljung-Box. Es razonable porque los conteos mensuales son de miles.
-- *Calendario sin ajustar.* Los meses tienen entre 20 y 23 días hábiles (alrededor de ±7 %); el modelo principal no lo corrige y se prueba como sensibilidad.
-- *Sin cambio estructural.* El lanzamiento y la pausa del acero no se modelan; su efecto se evalúa aparte.
+- *Período anual fijo ($m = 12$):* el índice de 2024 y 2025 es casi idéntico (Figura 2), aunque la fuerza estacional es 0.28.
+- *Proporcionalidad a los días hábiles:* las órdenes llegan casi solo de lunes a viernes (236 por día de lunes a jueves, 28 en fin de semana).
+- *Innovaciones no correlacionadas:* se verifica con Ljung-Box sobre los residuos del SARIMA.
+- *Sin cambio estructural:* el acero no se modela; su efecto se evalúa aparte.
 
 **Métricas de éxito.** Con $e_t = y_t - \hat y^{+}_t$ y $n$ pronósticos,
 
 $$\text{MAE} = \frac{1}{n}\sum |e_t|, \qquad \text{RMSE} = \sqrt{\frac{1}{n}\sum e_t^2}, \qquad \text{MASE} = \frac{\text{MAE}}{\frac{1}{n_0 - 12}\sum_{t=13}^{n_0} |y_t - y_{t-12}|},$$
 
-donde el denominador es el error del ingenuo estacional dentro del entrenamiento ($n_0$ meses). Un MASE menor que 1 indica que el modelo supera al ingenuo del entrenamiento (Hyndman y Koehler, 2006). Se calcula por ventana y se promedia.
+donde el denominador es el error del ingenuo estacional en el entrenamiento ($n_0$ meses); un MASE menor que 1 supera a ese ingenuo (Hyndman y Koehler, 2006). Se calcula por ventana y se promedia; también se reporta el sesgo medio $\frac{1}{n}\sum(\hat y_t - y_t)$.
 
-**Validación.** Ventana expansiva sin barajar: el primer entrenamiento va de enero de 2023 a diciembre de 2024 (24 meses) y pronostica tres meses; se agrega un mes por ventana hasta pronosticar julio a septiembre de 2026. Resultan 19 ventanas y 57 pronósticos. Las referencias son el **ingenuo estacional** (SNAIVE: repite el mismo mes del año anterior) y **AutoETS**. **Criterio de éxito:** MASE menor que 1 y menor que el de SNAIVE en la mayoría de las ventanas, confirmado con la prueba de Wilcoxon sobre los MASE pareados. Como el lanzamiento del acero afecta las ventanas recientes, los resultados se reportan por separado según el origen: antes de marzo de 2026 (15 ventanas, pronostican hasta mayo) y desde marzo de 2026 (4 ventanas, pronostican de abril a septiembre).
+**Validación.** Ventana expansiva: el primer entrenamiento va de enero de 2023 a diciembre de 2024 y pronostica tres meses; se agrega un mes por ventana hasta pronosticar agosto a octubre de 2026 (20 ventanas, 60 pronósticos por modelo). **Criterio de éxito:** MASE menor que 1 y menor que el de SNAIVE en la mayoría de las ventanas, confirmado con la prueba de Wilcoxon pareada (Wilcoxon, 1945). Por el acero, los resultados se separan según el origen: antes de marzo de 2026 (15 ventanas) y desde marzo (5 ventanas).
 
-# 6. Primer modelo aplicado
+# 6. Primer modelo aplicado y comparación
 
-El SARIMA se ajustó y evaluó en el notebook (Python 3, `statsforecast` 2.1.1, `statsmodels` 0.14.6, semilla 2026). A lo largo de las 19 ventanas, AutoARIMA eligió SARIMA$(1,1,0)(0,1,0)_{12}$ en 10, $(3,1,0)(0,1,0)_{12}$ en 7 y otros dos órdenes en las 2 restantes.
+Los 12 modelos se evaluaron en el notebook (Python 3.12, `statsforecast` 2.1.1, `prophet` 1.5.0, `chronos-forecasting` 2.3.2, `timesfm` 3.0.2, semilla 2026). La referencia ingenua es SNAIVE.
 
-| Modelo | MAE | RMSE | MASE, todas (19) | MASE, antes de mar-2026 (15) | MASE, desde mar-2026 (4) |
-|---|---|---|---|---|---|
-| Ingenuo estacional (SNAIVE) | 248.9 | 349.6 | **0.59** | **0.33** | 1.57 |
-| AutoETS | 343.1 | 486.0 | 0.83 | 0.49 | 2.11 |
-| SARIMA(1,1,0)(0,1,0)₁₂ | 279.6 | 413.7 | 0.62 | 0.43 | **1.36** |
+| Modelo | MAE | MASE | MASE antes | MASE desde | Gana | p | Sesgo |
+|-----------------|--------|-------|--------|--------|------|--------|-------|
+| **SNAIVE_dh** | **234.6** | **0.56** | **0.25** | 1.52 | 14 | 0.008 | −163 |
+| SARIMA_dh | 283.5 | 0.63 | 0.43 | **1.25** | 8 | 0.55 | −49 |
+| SNAIVE (ref.) | 268.7 | 0.65 | 0.33 | 1.61 | – | – | −154 |
+| SARIMA | 306.8 | 0.70 | 0.39 | 1.62 | 10 | 0.76 | −48 |
+| Ridge | 301.1 | 0.71 | 0.50 | 1.34 | 10 | 0.70 | +74 |
+| Prophet | 337.5 | 0.76 | 0.52 | 1.48 | 4 | 0.040 | −112 |
+| AutoETS_dh | 352.0 | 0.81 | 0.58 | 1.49 | 4 | 0.014 | −88 |
+| TimesFM 2.5 | 357.4 | 0.84 | 0.54 | 1.71 | 3 | 0.001 | −86 |
+| Chronos-2_dh | 393.0 | 0.91 | 0.60 | 1.83 | 2 | < 0.001 | −150 |
+| AutoETS | 374.8 | 0.91 | 0.48 | 2.19 | 4 | 0.002 | −112 |
+| Chronos-2 | 403.7 | 0.92 | 0.67 | 1.67 | 2 | < 0.001 | −90 |
+| Ingenuo | 465.8 | 1.09 | 0.74 | 2.14 | 2 | < 0.001 | −42 |
 
-Tabla 2. Desempeño de pronóstico a 3 meses. MAE y RMSE en órdenes por mes, sobre los 57 pronósticos.
-
-![Figura 4. Arriba, MASE por ventana (línea punteada: marzo de 2026). Abajo, pronóstico emitido tres meses antes contra lo observado.](figuras/fig4_validacion.png){width=80%}
+Tabla 2. Validación a 3 meses (20 ventanas, 60 pronósticos por modelo). MASE antes y desde: ventanas con origen antes de marzo de 2026 (15) y desde marzo (5). Gana: ventanas con MASE menor que SNAIVE. p: Wilcoxon contra SNAIVE. MAE y sesgo en órdenes por mes.
 
 **Lectura de los resultados.**
 
-- *El SARIMA no supera al ingenuo estacional.* Su MASE promedio es 0.62 contra 0.59; gana en 9 de las 19 ventanas y Wilcoxon no encuentra diferencia (p = 0.57). Cumple la primera parte del criterio (MASE < 1) pero no la segunda. AutoETS es peor (0.83) y solo supera a SNAIVE en 4 ventanas.
-- *Antes del lanzamiento del acero, repetir el mes del año anterior es lo mejor* (0.33 contra 0.43), porque el patrón de 2024 y 2025 se repite casi igual.
-- *Con origen desde marzo de 2026, los tres modelos fallan* (MASE entre 1.36 y 2.11); el SARIMA es el menos malo, pero son solo 4 ventanas. SNAIVE subestima 9 % (Figura 4, abajo: sigue el nivel del año anterior); el SARIMA, 2 %, pero para septiembre de 2026 pronosticó cerca de 5,900 órdenes (Figura 4, abajo) contra 4,095 observadas.
-- *El orden del modelo es inestable* (cuatro órdenes distintos), esperable con 24 a 42 meses y una diferencia estacional que consume 12.
-- *Los residuos son compatibles con ruido blanco* (Ljung-Box p = 0.71 con 6 rezagos y 0.61 con 12; $n = 32$), aunque con tan pocos residuos la prueba detecta poco. Su media es −79 y su desviación 397 órdenes.
-- *Sensibilidad por días hábiles.* Modelar el promedio por día hábil y multiplicar de vuelta mejora a los tres modelos (MASE: SNAIVE 0.51, SARIMA 0.56, AutoETS 0.64) y no cambia el mejor del conjunto; con origen desde marzo de 2026 los resultados son AutoETS 0.98, SARIMA 1.04 y SNAIVE 1.51.
+- *El mejor modelo es SNAIVE_dh,* el único que cumple todo el criterio: MASE de 0.56, menor que el de SNAIVE en 14 de 20 ventanas (p = 0.008). A SARIMA_dh, el segundo, le gana en 13 de 20 (p = 0.14, no significativo). El error crece con el horizonte (MASE 0.51, 0.56 y 0.63 a uno, dos y tres meses).
+- *El ajuste por días hábiles mejora a los tres clásicos* (SNAIVE de 0.65 a 0.56, SARIMA de 0.70 a 0.63, AutoETS de 0.91 a 0.81) y casi no cambia a Chronos-2.
+- *Los modelos de fundación no superan a las referencias:* TimesFM (0.84) y Chronos-2 (0.92) superan al ingenuo, pero a SNAIVE solo en 2 o 3 ventanas. Con 24 a 43 meses de contexto suavizan el patrón anual, que aquí es lo más predecible.
+- *Desde marzo de 2026 todos fallan* (MASE entre 1.25 y 2.19). SARIMA_dh y Ridge siguen mejor el nivel reciente, pero a tres meses pronosticaron entre 4,900 y 5,700 órdenes para septiembre y octubre, contra unas 4,100 observadas (Figura 4).
+- *El orden de SARIMA_dh es inestable:* $(0,1,0)(0,1,0)_{12}$ en 11 ventanas, $(0,1,0)(1,1,0)_{12}$ en 5 y otros tres en las 4 restantes. Con los 46 meses queda $(1-B)(1-B^{12})\,r_t = \varepsilon_t$; sus residuos son compatibles con ruido blanco (Ljung-Box p = 0.40 con 6 rezagos y 0.68 con 12; $n = 33$).
+- *Casi todos subestiman,* porque el nivel creció; en SNAIVE_dh el sesgo es de −163 órdenes por mes.
 
-| Mes | SARIMA (intervalo 80 %) | SNAIVE | AutoETS |
-|---|---|---|---|
-| Octubre 2026 | 5,172 (4,653 a 5,691) | 4,948 | 4,846 |
-| Noviembre 2026 | 3,976 (3,416 a 4,536) | 4,187 | 4,847 |
-| Diciembre 2026 | 4,204 (3,519 a 4,888) | 4,156 | 4,847 |
-| **Total** | **13,352** | **13,291** | **14,540** |
+![Figura 4. Arriba, MASE por ventana de cuatro modelos (línea punteada: marzo de 2026). Abajo, pronóstico emitido tres meses antes contra lo observado.](figuras/fig4_validacion.png){width=58%}
 
-Tabla 3. Pronóstico de octubre a diciembre de 2026 con los 45 meses.
+| Mes (días hábiles) | SNAIVE_dh (80 %) | SARIMA_dh | Ridge | TimesFM |
+|------------------|------------------------|-----------|---------|----------|
+| Nov. 2026 (21) | 4,396 (4,338 a 4,874) | 3,806 | 4,726 | 4,179 |
+| Dic. 2026 (23) | 4,156 (4,101 a 4,608) | 3,510 | 4,660 | 4,203 |
+| Ene. 2027 (21) | 4,485 (4,359 a 4,973) | 3,895 | 4,883 | 4,382 |
+| **Total** | **13,038** | **11,211** | **14,269** | **12,764** |
 
-El total del trimestre es casi el mismo con SARIMA y con el ingenuo (13,352 y 13,291), pero **el valor de octubre no es confiable**: al día 25 ya hay 3,036 órdenes, y si los seis días restantes se parecen a la última semana el mes cerraría cerca de 4,000, por debajo del intervalo del 80 %. El SARIMA arrastra el nivel alto de junio a agosto. En resumen, con 45 meses el modelo estadístico clásico apenas iguala a la regla más simple; el valor del ejercicio es mostrar dónde falla y por qué.
+Tabla 3. Pronóstico de noviembre de 2026 a enero de 2027 con los 46 meses. El intervalo es empírico: cuantiles 10 y 90 del cociente real/pronóstico de la validación en cada horizonte; es asimétrico hacia arriba por el sesgo negativo.
 
-# 7. Próximos pasos
+**Pronóstico adoptado: SNAIVE_dh.** Del 1 al 11 de noviembre de 2026 llegaron 2,033 órdenes, 8 % más por día hábil que en 2025, lo que proyecta cerca de 4,750 en noviembre: dentro del intervalo y coherente con la reapertura del acero. SARIMA_dh arrastra el nivel bajo de septiembre y octubre y pronostica un trimestre 14 % menor. Con 46 meses gana la regla más simple corregida por calendario; ningún modelo anticipa cambios de nivel causados por decisiones de capacidad.
 
-Para la entrega final se probará un segundo método que atienda lo que falló: el cambio de nivel del acero y los pocos datos. Se propone un **modelo de fundación (Chronos-2)**: se usa sin entrenamiento, lo que conviene con 45 meses, y admite covariables (Ansari et al., 2024), como la proporción de órdenes de acero y los días hábiles. Se evaluará con las mismas 19 ventanas y el mismo MASE, y se compararán con Prophet (Taylor y Letham, 2018) como contraste y con el ajuste por días hábiles de la sección 6. A mediano plazo se pasará al **pronóstico diario**: una exploración preliminar con 1,394 días (notebook aparte) muestra una estacionalidad semanal fuerte (0.89), de lunes a jueves unas 200 a 230 órdenes por día y fines de semana cerca de 25, y caídas marcadas en feriados de EE. UU., que el modelo mensual no puede capturar. También se confirmará con operaciones cómo se reabre el producto de acero, porque cambia el nivel esperado de los próximos meses.
+# 7. Próximos pasos: pronóstico diario a 15 días
+
+**Pregunta.** La serie diaria es mucho más variable que la mensual: de lunes a jueves llegan unas 236 órdenes por día, el viernes 118 y el fin de semana 28, y los feriados la alteran. La hipótesis es que **repartir el pronóstico mensual entre los días según esos patrones da un pronóstico a 15 días más preciso que modelar la serie diaria directamente.**
+
+![Figura 5. Izquierda, órdenes promedio por día de la semana y país (hora de Costa Rica, últimas 52 semanas). Derecha, serie diaria desde agosto de 2026.](figuras/fig6_vista_diaria.png){width=58%}
+
+**Hora local y feriados por país (Figura 5).** El pronóstico se emite en hora de Costa Rica, pero los feriados ocurren en la fecha local de cada cliente. En EE. UU. y Canadá los escaneos llegan entre las 6:00 y las 16:00 de Costa Rica, y la fecha coincide. En Australia y Nueva Zelanda la jornada cae en la tarde del día anterior de Costa Rica: su lunes llega el domingo y un feriado suyo reduce el día anterior en Costa Rica. Por eso se trabaja **por país**, $y_{p,t}$ con $p \in \{\text{US}, \text{CA}, \text{AU}, \text{NZ}\}$, con su calendario local en fecha de Costa Rica.
+
+**Métodos a comparar.**
+
+- *A. Reparto del pronóstico mensual.* Para cada día $t$ se calcula un nivel esperado $n_t = \sum_p s_p(w_t)\, f_p(t)$, donde $s_p(w)$ es el promedio del país $p$ en el día de la semana $w$ (últimas 26 semanas sin feriados) y $f_p(t)$ el factor del feriado (mediana del cociente real/base en sus ocurrencias pasadas; 1 si no hay feriado). El pronóstico diario es $\hat y_t = \hat Y_{M(t)}\, n_t / \sum_{s \in M(t)} n_s$, con $\hat Y_M$ el pronóstico SNAIVE_dh del mes. Variante A2: cuando el origen cae a mitad de mes, se reparte solo lo que falta, $\max(0, \hat Y_M - \text{observado})$, entre los días restantes.
+- *B. Modelos diarios directos* con $m = 7$: SNAIVE semanal, ETS, SARIMA, MSTL (períodos 7 y 365), Prophet con feriados por país, Chronos-2 con feriados como covariables, TimesFM y LightGBM con rezagos y calendario.
+- *C. Híbrido:* combinar A con el mejor de B.
+
+**Validación.** Unos 52 orígenes semanales del último año a 15 días, sin fuga y con las métricas del objetivo 8. Riesgos: el fin de año y el nivel del acero tras la reapertura.
 
 # Referencias
 
-Ansari, A. F., Stella, L., Turkmen, C., Zhang, X., Mercado, P., Shen, H., Shchur, O., Rangapuram, S. S., Arango, S. P., Kapoor, S., Zschiegner, J., Maddix, D. C., Wang, H., Mahoney, M. W., Torkkola, K., Wilson, A. G., Bohlke-Schneider, M., & Wang, Y. (2024). Chronos: Learning the language of time series. *Transactions on Machine Learning Research*. https://arxiv.org/abs/2403.07815
+Ansari, A. F., Shchur, O., Küken, J., Auer, A., Han, B., Mercado, P., Rangapuram, S. S., Shen, H., Stella, L., Zhang, X., Goswami, M., Kapoor, S., Maddix, D. C., Guerron, P., Hu, T., Yin, J., Erickson, N., Desai, P. M., Wang, H., … Bohlke-Schneider, M. (2025). *Chronos-2: From univariate to universal forecasting* (arXiv:2510.15821). arXiv. https://arxiv.org/abs/2510.15821
 
 Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. (1990). STL: A seasonal-trend decomposition procedure based on loess. *Journal of Official Statistics, 6*(1), 3–73.
+
+Das, A., Kong, W., Sen, R., & Zhou, Y. (2024). A decoder-only foundation model for time-series forecasting. En *Proceedings of the 41st International Conference on Machine Learning*. https://arxiv.org/abs/2310.10688
 
 Dickey, D. A., & Fuller, W. A. (1979). Distribution of the estimators for autoregressive time series with a unit root. *Journal of the American Statistical Association, 74*(366), 427–431. https://doi.org/10.1080/01621459.1979.10482531
 
 Garza, A., Mergenthaler-Canseco, M., Challú, C., & Olivares, K. G. (2022). *StatsForecast: Lightning fast forecasting with statistical and econometric models*. PyCon Salt Lake City. https://github.com/Nixtla/statsforecast
+
+Hoerl, A. E., & Kennard, R. W. (1970). Ridge regression: Biased estimation for nonorthogonal problems. *Technometrics, 12*(1), 55–67. https://doi.org/10.1080/00401706.1970.10488634
 
 Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and practice* (3.ª ed.). OTexts. https://otexts.com/fpp3/
 
@@ -163,7 +215,7 @@ Hyndman, R. J., & Koehler, A. B. (2006). Another look at measures of forecast ac
 
 Kwiatkowski, D., Phillips, P. C. B., Schmidt, P., & Shin, Y. (1992). Testing the null hypothesis of stationarity against the alternative of a unit root. *Journal of Econometrics, 54*(1–3), 159–178. https://doi.org/10.1016/0304-4076(92)90104-Y
 
-LightForce Orthodontics. (2026). *Tabla analytics.manufacturing.mfg_all_orders* [Base de datos interna de manufactura, Databricks]. Datos consultados el 26 de octubre de 2026 con autorización de la empresa.
+LightForce Orthodontics. (2026). *Tabla analytics.manufacturing.mfg_all_orders* [Base de datos interna de manufactura, Databricks]. Datos consultados el 12 de noviembre de 2026.
 
 Ljung, G. M., & Box, G. E. P. (1978). On a measure of lack of fit in time series models. *Biometrika, 65*(2), 297–303. https://doi.org/10.1093/biomet/65.2.297
 

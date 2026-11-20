@@ -25,12 +25,6 @@ env/
 .RData
 .Rproj.user/
 
-# Datos y salidas pesadas
-*.csv
-*.xlsx
-*.parquet
-*.log
-
 # Secretos
 .env
 *.key
